@@ -1,6 +1,6 @@
 # Android applications architecture 
 
-Example demonstrates three different approaches to the implementation of the architecture of the application on the Android platform.
+Example demonstrates three different approaches to the implementation of the Android applications.
 
     * Master branch - traditional approach, the application is divided into the view layer and a model
     * MVP branch - Model View Presenter
