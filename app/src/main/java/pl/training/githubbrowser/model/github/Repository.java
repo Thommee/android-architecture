@@ -19,6 +19,22 @@ public class Repository implements Parcelable{
     private User owner;
     private boolean fork;
 
+    public Repository() {
+    }
+
+    protected Repository(Parcel in) {
+        id = in.readLong();
+        name = in.readString();
+        description = in.readString();
+        forks = in.readInt();
+        watchers = in.readInt();
+        stars = in.readInt();
+        language = in.readString();
+        homepage = in.readString();
+        owner = in.readParcelable(User.class.getClassLoader());
+        fork = in.readByte() != 0;
+    }
+
     public long getId() {
         return id;
     }
@@ -97,19 +113,6 @@ public class Repository implements Parcelable{
 
     public void setFork(boolean fork) {
         this.fork = fork;
-    }
-
-    protected Repository(Parcel in) {
-        id = in.readLong();
-        name = in.readString();
-        description = in.readString();
-        forks = in.readInt();
-        watchers = in.readInt();
-        stars = in.readInt();
-        language = in.readString();
-        homepage = in.readString();
-        owner = in.readParcelable(User.class.getClassLoader());
-        fork = in.readByte() != 0;
     }
 
     @Override

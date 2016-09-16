@@ -7,7 +7,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
@@ -35,8 +34,6 @@ import rx.schedulers.Schedulers;
 
 public class RepositoriesActivity extends AppCompatActivity {
 
-    private static final String TAG = RepositoriesActivity.class.getName();
-
     @Inject
     GitHub gitHub;
 
@@ -53,8 +50,7 @@ public class RepositoriesActivity extends AppCompatActivity {
 
     Subscription subscription;
 
-
-    Action0 onLoadingComplete = () -> {
+    Action0 onLoadingCompleted = () -> {
         progressBar.setVisibility(View.GONE);
         if (repositoriesRecycleView.getAdapter().getItemCount() > 0) {
             repositoriesRecycleView.requestFocus();
@@ -66,15 +62,14 @@ public class RepositoriesActivity extends AppCompatActivity {
         }
     };
 
-    Action1<List<Repository>> onRepositoriesLoaded = repositories -> {
+    Action1<List<Repository>> showRepositories = repositories -> {
         RepositoryAdapter adapter = (RepositoryAdapter) repositoriesRecycleView.getAdapter();
         adapter.setRepositories(repositories);
         adapter.notifyDataSetChanged();
     };
 
 
-    Action1<Throwable> onLoadingError = throwable -> {
-        Log.e(TAG, "Error loading repositories: " + throwable.getMessage());
+    Action1<Throwable> showError = throwable -> {
         progressBar.setVisibility(View.GONE);
         if (throwable instanceof HttpException && ((HttpException) throwable).code() == 404) {
             infoTextView.setText(R.string.error_username_not_found);
@@ -116,14 +111,14 @@ public class RepositoriesActivity extends AppCompatActivity {
         searchButton.setOnClickListener(__ -> loadGitHubRepositories(usernameEditText.getText().toString()));
     }
 
-    public void loadGitHubRepositories(String username) {
+    private void loadGitHubRepositories(String username) {
         progressBar.setVisibility(View.VISIBLE);
         repositoriesRecycleView.setVisibility(View.GONE);
         infoTextView.setVisibility(View.GONE);
         subscription = gitHub.getRepositories(username)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(onRepositoriesLoaded, onLoadingError, onLoadingComplete);
+                .subscribe(showRepositories, showError, onLoadingCompleted);
     }
 
     private void hideSoftKeyboard() {

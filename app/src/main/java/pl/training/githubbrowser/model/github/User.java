@@ -16,6 +16,19 @@ public class User implements Parcelable {
     @SerializedName("avatar_url")
     private String avatarUrl;
 
+    public User() {
+    }
+
+    protected User(Parcel in) {
+        id = in.readLong();
+        name = in.readString();
+        url = in.readString();
+        email = in.readString();
+        login = in.readString();
+        location = in.readString();
+        avatarUrl = in.readString();
+    }
+
     public long getId() {
         return id;
     }
@@ -70,16 +83,6 @@ public class User implements Parcelable {
 
     public void setAvatarUrl(String avatarUrl) {
         this.avatarUrl = avatarUrl;
-    }
-
-    protected User(Parcel in) {
-        id = in.readLong();
-        name = in.readString();
-        url = in.readString();
-        email = in.readString();
-        login = in.readString();
-        location = in.readString();
-        avatarUrl = in.readString();
     }
 
     @Override
