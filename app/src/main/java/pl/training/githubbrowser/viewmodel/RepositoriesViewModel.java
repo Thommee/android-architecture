@@ -6,7 +6,6 @@ import pl.training.githubbrowser.flux.RepositoryChangeAction;
 import pl.training.githubbrowser.flux.Store;
 import pl.training.githubbrowser.model.github.GitHub;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 import rx.subjects.PublishSubject;
 
@@ -22,22 +21,17 @@ public class RepositoriesViewModel {
         this.gitHub = gitHub;
         this.store = store;
 
-        store.repositoriesStream
+        store.eventsStream
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(
-                        storeChangeEvent -> repositoriesStream.onNext(store.getList())
-                );
-
+                .subscribe(storeChangeEvent -> repositoriesStream.onNext(store.getList()));
     }
-
-
 
     public void loadRepositories(String username) {
         gitHub.getRepositories(username)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                // strumien ist zamieniam na strumien elementów
+                // strumien list jest zamieniany na strumien elementów
                 .flatMapIterable(list -> list)
                 // elementy mapuje na rvm
                 .map(RepositoryViewModel::new)
@@ -45,7 +39,7 @@ public class RepositoriesViewModel {
                 .toList()
                 // zapodaje do publish subjecta
                 .subscribe(repositoryViewModels -> {
-                        store.onChange(new RepositoryChangeAction(repositoryViewModels));
+                        store.onAction(new RepositoryChangeAction(repositoryViewModels));
                 },
                         repositoriesStream::onError
                 );
