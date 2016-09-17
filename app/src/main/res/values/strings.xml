@@ -12,4 +12,5 @@
     <string name="text_fork">This repository is a fork</string>
     <string name="text_language">Language: %s</string>
     <string name="search">Search</string>
+    <string name="title_activity_repository">RepositoryActivity</string>
 </resources>

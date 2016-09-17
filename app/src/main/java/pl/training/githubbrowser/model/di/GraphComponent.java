@@ -7,7 +7,7 @@ import pl.training.githubbrowser.GitHubBrowserApplication;
 import pl.training.githubbrowser.view.RepositoriesActivity;
 
 @Singleton
-@Component(modules = {MainModule.class})
+@Component(modules = {MainModule.class, ViewModelModule.class })
 public interface GraphComponent {
 
     void inject(RepositoriesActivity mainActivity);

@@ -11,7 +11,7 @@ public class AuthorizationHeaderInterceptor implements Interceptor {
     @Override
     public Response intercept(Chain chain) throws IOException {
         Request request = chain.request().newBuilder()
-                .addHeader("Authorization", "token ***")
+                .addHeader("Authorization", "token 4bcdb4db092fca6af22aa21702eb36a578fc9b46")
                 .build();
         return chain.proceed(request);
     }
