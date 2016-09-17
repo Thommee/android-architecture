@@ -7,10 +7,10 @@ import pl.training.githubbrowser.model.github.GitHub;
 import pl.training.githubbrowser.viewmodel.RepositoriesViewModel;
 
 @Module
-public class ViewModelModule {
+public class StoreModule {
 
     @Provides
-    RepositoriesViewModel repositoriesViewModel(GitHub gitHub, Store store) {
-        return new RepositoriesViewModel(gitHub, store);
+    Store repositoriesViewModel() {
+        return new Store();
     }
 }
